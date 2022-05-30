@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <title>Quantum Integer Factorization with Shor's Algorithm</title>
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <!-- Custom styles for this template -->
+      <link href="css/business-frontpage.css" rel="stylesheet">
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+   </head>
+   <body>
+      <script>
+         function generate() {
+           console.log("REQUEST SUCCEEDED");
+           document.getElementById("loader").style.display = "block";
+           document.getElementById("loader").style.visibility = "visible";
+           document.getElementById("keyHeader").innerHTML = "";
+           document.getElementById("keyView").innerHTML = "";
+         
+         targetDevice = document.getElementById("devices").value
+         
+         number = document.getElementById("number").value
+         
+         data = JSON.stringify({ device: targetDevice,number:number});
+         
+         $.ajax({
+         type: "POST",
+         url: "http://localhost:8000/factor/",
+         contentType: "application/json; charset=utf-8",
+         data: data,
+         success: function(d){
+           console.log(d);
+           document.getElementById("loader").style.display = "none";
+           document.getElementById("loader").style.visibility = "hidden";
+           document.getElementById("keyHeader").innerHTML = "Result:";
+           document.getElementById("keyView").innerHTML = d['result'];
+           }
+         });
+         }
+      </script>
+      <style>
+         .loader,
+         .loader:before,
+         .loader:after {
+         border-radius: 50%;
+         width: 2.5em;
+         height: 2.5em;
+         -webkit-animation-fill-mode: both;
+         animation-fill-mode: both;
+         -webkit-animation: load7 1.8s infinite ease-in-out;
+         animation: load7 1.8s infinite ease-in-out;
+         }
+         .loader {
+         visibility:hidden;
+         display:none;
+         color: #0277bd;
+         font-size: 10px;
+         margin: 80px auto;
+         position: relative;
+         text-indent: -9999em;
+         -webkit-transform: translateZ(0);
+         -ms-transform: translateZ(0);
+         transform: translateZ(0);
+         -webkit-animation-delay: -0.16s;
+         animation-delay: -0.16s;
+         }
+         .loader:before,
+         .loader:after {
+         content: '';
+         position: absolute;
+         top: 0;
+         }
+         .loader:before {
+         left: -3.5em;
+         -webkit-animation-delay: -0.32s;
+         animation-delay: -0.32s;
+         }
+         .loader:after {
+         left: 3.5em;
+         }
+         @-webkit-keyframes load7 {
+         0%,
+         80%,
+         100% {
+         box-shadow: 0 2.5em 0 -1.3em;
+         }
+         40% {
+         box-shadow: 0 2.5em 0 0;
+         }
+         }
+         @keyframes load7 {
+         0%,
+         80%,
+         100% {
+         box-shadow: 0 2.5em 0 -1.3em;
+         }
+         40% {
+         box-shadow: 0 2.5em 0 0;
+         }
+         }
+      </style>
+      <header class="bg-dark py-5 mb-5">
+         <div class="container h-100">
+            <div class="row h-100 align-items-center">
+               <div class="col-lg-12">
+                  <h1 class="display-4 text-white mt-5 mb-2">Integer Factorization with Shor's Algorithm</h1>
+               </div>
+            </div>
+         </div>
+      </header>
+      <div class="container">
+         <div class="row">
+            <div class="col-md-8 mb-5">
+               <h2>Pick a device, enter the number you wish to factor and click Generate</h2>
+               <hr>
+               <span>
+                  <label>Pick a quantum device:</label>
+                  <select name="devices" id="devices">
+                     <option value="ibmq_qasm_simulator">ibmq_qasm_simulator (32 qubits)</option>
+		     <option value="ibmq_manila">ibmq_manila (5 qubits)</option>
+		     <option value="ibmq_bogota">ibmq_bogota (5 qubits)</option>
+		     <option value="ibmq_santiago">ibmq_santiago (5 qubits)</option>
+		     <option value="ibmq_quito">ibmq_quito (5 qubits)</option>
+                  </select>
+               </span>
+               <br><br>
+               <label>Number to factor:</label>
+               <input type="text" id="number" name="number" value="0"><br>
+               <div id="loader" class="loader"></div>
+               <p id="keyHeader"></p>
+               <strong>
+                  <p id="keyView"></p>
+               </strong>
+               <button class="btn btn-primary"  onclick="generate();">Generate &raquo;</button>
+            </div>
+         </div>
+      </div>
+      <footer class="bg-dark py-5">
+         <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Quantum Computing UK 2022</p>
+         </div>
+      </footer>
+   </body>
+</html>
